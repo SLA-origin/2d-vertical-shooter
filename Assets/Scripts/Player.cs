@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform firePoint;             // 총알이 생성될 기준 위치
     [SerializeField] private GameObject sideBulletPrefab;    // 좌우 총알 프리팹
     [SerializeField] private GameObject centerBulletPrefab;  // 중앙 강화 총알 프리팹 (power 3 전용)
+    [SerializeField] private GameObject boomPrefab;          // 폭발(Boom) 프리팹
     [SerializeField] private float moveSpeed = 5f;           // 이동 속도
     [SerializeField] private float fireRate = 0.1f;          // 발사 간격 (초) — 값이 작을수록 빠르게 발사
     [SerializeField] private float sideOffset = 0.25f;       // 좌우 총알의 중앙으로부터 떨어진 거리
@@ -54,17 +55,50 @@ public class Player : MonoBehaviour
 
         Move();
 
-        if (Input.GetMouseButton(0))
+        // GetMouseButtonDown : 버튼을 누른 첫 프레임에만 true → 클릭하자마자 즉시 1발 발사
+        if (Input.GetMouseButtonDown(0))
+        {
+            Fire();
+            _fireTimer = 0f; // 타이머 초기화하여 바로 다음 연속 발사 간격을 정확히 유지
+        }
+        // GetMouseButton : 버튼을 누르고 있는 동안 매 프레임 true → fireRate 간격으로 연속 발사
+        else if (Input.GetMouseButton(0))
         {
             _fireTimer += Time.deltaTime;
 
-            // fireRate 간격마다 한 번씩 발사
+            // fireRate(초) 이상 경과했을 때만 발사 — 너무 빠른 연사 방지
             if (_fireTimer >= fireRate)
             {
                 Fire();
                 _fireTimer = 0f;
             }
         }
+
+        // 마우스 우클릭 시 폭발(Boom) 발동
+        if (Input.GetMouseButtonDown(1))
+        {
+            UseBoom();
+        }
+    }
+
+    /// <summary>
+    /// 마우스 우클릭 시 화면 중앙에 폭발(Boom) 프리팹을 생성합니다.
+    /// ViewportToWorldPoint(0.5, 0.5)는 뷰포트 정중앙을 월드 좌표로 변환합니다.
+    /// </summary>
+    private void UseBoom()
+    {
+        if (boomPrefab == null)
+        {
+            Debug.LogError("[Player] boomPrefab이 인스펙터에 연결되지 않았습니다!");
+            return;
+        }
+
+        // 뷰포트 중앙(0.5, 0.5)을 월드 좌표로 변환 → 항상 화면 정중앙
+        Vector3 centerWorld = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, -Camera.main.transform.position.z));
+        centerWorld.z = 0f; // 2D 게임이므로 z축은 0으로 고정
+
+        // 화면 중앙 위치에 폭발 오브젝트 생성
+        Instantiate(boomPrefab, centerWorld, Quaternion.identity);
     }
 
     /// <summary>
@@ -128,12 +162,30 @@ public class Player : MonoBehaviour
 
     /// <summary>
     /// 지정한 프리팹을 firePoint 기준 offset 위치에 생성합니다.
+    /// Instantiate 대신 ObjectManager 풀에서 꺼내 재사용합니다.
+    /// centerBulletPrefab이면 PlayerBulletB(강화탄), 아니면 PlayerBulletA(기본탄) 풀을 사용합니다.
     /// </summary>
-    /// <param name="prefab">생성할 총알 프리팹</param>
-    /// <param name="offset">firePoint로부터의 로컬 오프셋</param>
     private void SpawnBullet(GameObject prefab, Vector3 offset)
     {
-        Instantiate(prefab, firePoint.position + offset, firePoint.rotation);
+        if (firePoint == null)
+        {
+            Debug.LogError("[Player] firePoint가 Inspector에 연결되지 않았습니다!");
+            return;
+        }
+        if (prefab == null)
+        {
+            Debug.LogError("[Player] 총알 프리팹이 Inspector에 연결되지 않았습니다!");
+            return;
+        }
+
+        Vector3 spawnPos = firePoint.position + offset;
+
+        // 어떤 풀을 쓸지 프리팹으로 구분합니다
+        // centerBulletPrefab → PlayerBulletB(강화탄), 그 외 → PlayerBulletA(기본탄)
+        if (prefab == centerBulletPrefab)
+            ObjectManager.Instance.GetPlayerBulletB(spawnPos, firePoint.rotation);
+        else
+            ObjectManager.Instance.GetPlayerBulletA(spawnPos, firePoint.rotation);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

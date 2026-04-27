@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>팀 프로젝트 기획서 — 지상 정화 작전</title>
+  <style>
+    /* ── Base Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0f14;
+      --surface:   #13161f;
+      --card:      #1a1e2b;
+      --border:    #252c3e;
+      --accent1:   #00e5c8;   /* cyan  – primary */
+      --accent2:   #ff4f5e;   /* red   – danger  */
+      --accent3:   #b06cff;   /* purple– toxic   */
+      --accent4:   #ffd166;   /* yellow– warning */
+      --green:     #3ddc84;
+      --blue:      #4da6ff;
+      --text:      #d0d8f0;
+      --muted:     #7a849e;
+      --radius:    10px;
+      --glow-cyan: 0 0 18px rgba(0,229,200,.30);
+      --glow-red:  0 0 18px rgba(255,79,94,.30);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ─────────── HERO ─────────── */
+    .hero {
+      position: relative;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,229,200,.12) 0%, transparent 70%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 39px,
+          rgba(255,255,255,.025) 40px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 39px,
+          rgba(255,255,255,.025) 40px
+        );
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--accent1);
+      color: var(--accent1);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--glow-cyan);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: #fff;
+      text-shadow: 0 0 40px rgba(0,229,200,.4);
+      line-height: 1.2;
+    }
+    .hero h1 span { color: var(--accent1); }
+    .hero-sub {
+      margin-top: 16px;
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 560px;
+    }
+    .hero-meta {
+      margin-top: 28px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .hero-meta span {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .hero-meta span b { color: var(--text); }
+
+    /* ─────────── TOC ─────────── */
+    .toc-wrap {
+      max-width: 960px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent1);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+    }
+    .toc h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent1); margin-bottom: 12px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin: 5px 0; }
+    .toc a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+    .toc a:hover { color: var(--accent1); }
+
+    /* ─────────── LAYOUT ─────────── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 100px;
+    }
+
+    /* ─────────── SECTION ─────────── */
+    .section { margin-bottom: 72px; }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .section-label .num {
+      background: var(--accent1);
+      color: #000;
+      font-weight: 800;
+      font-size: 11px;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .section-label h2 {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+      color: #fff;
+    }
+    .section-label .line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─────────── CARDS ─────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent1);
+      margin-bottom: 10px;
+    }
+
+    /* ─────────── GRID ─────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 680px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ─────────── OVERVIEW CARDS ─────────── */
+    .ov-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ov-card::after {
+      content: attr(data-icon);
+      position: absolute;
+      right: 16px; top: 12px;
+      font-size: 32px;
+      opacity: .15;
+    }
+    .ov-card h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 8px; }
+    .ov-card p  { font-size: 14px; color: var(--text); line-height: 1.6; }
+
+    /* ─────────── FLOW ─────────── */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0;
+    }
+    .flow-step {
+      background: var(--surface);
+      border: 1px solid var(--accent1);
+      border-radius: var(--radius);
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent1);
+      box-shadow: var(--glow-cyan);
+    }
+    .flow-arrow { color: var(--muted); font-size: 18px; }
+
+    /* ─────────── SCENE CARDS ─────────── */
+    .scene-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .scene-card-head {
+      padding: 14px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .scene-card-head.factory { background: rgba(77,166,255,.12); color: var(--blue); border-bottom: 1px solid rgba(77,166,255,.2); }
+    .scene-card-head.battle  { background: rgba(255,79,94,.12);  color: var(--accent2); border-bottom: 1px solid rgba(255,79,94,.2); }
+    .scene-card-body { padding: 18px 20px; }
+    .scene-card-body li { font-size: 13px; color: var(--text); margin-bottom: 6px; list-style: none; padding-left: 16px; position: relative; }
+    .scene-card-body li::before { content: '›'; position: absolute; left: 0; color: var(--muted); }
+
+    /* ─────────── TABLE ─────────── */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 720px;
+    }
+    thead tr { background: var(--surface); }
+    th {
+      padding: 12px 14px;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent1);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    td {
+      padding: 11px 14px;
+      border-bottom: 1px solid rgba(37,44,62,.8);
+      color: var(--text);
+      vertical-align: middle;
+    }
+    tr:hover td { background: rgba(0,229,200,.04); }
+
+    .badge {
+      display: inline-block;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-green  { background: rgba(61,220,132,.15); color: var(--green); }
+    .badge-red    { background: rgba(255,79,94,.15);  color: var(--accent2); }
+    .badge-purple { background: rgba(176,108,255,.15); color: var(--accent3); }
+    .badge-yellow { background: rgba(255,209,102,.15); color: var(--accent4); }
+    .badge-blue   { background: rgba(77,166,255,.15); color: var(--blue); }
+    .badge-dark   { background: rgba(255,255,255,.08); color: #aaa; }
+
+    .danger-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+    .dot-1 { background:#3ddc84; }
+    .dot-2 { background:#ffd166; }
+    .dot-3 { background:#ff9a3c; }
+    .dot-4 { background:#ff4f5e; }
+    .dot-5 { background:#b06cff; box-shadow: 0 0 8px #b06cff; }
+
+    /* ─────────── CODE ─────────── */
+    pre {
+      background: #0a0c12;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent1);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      font-family: 'Consolas', 'Fira Code', monospace;
+      font-size: 13px;
+      color: #c9d1f0;
+      overflow-x: auto;
+      line-height: 1.8;
+    }
+    .kw  { color: #b06cff; }
+    .typ { color: #4da6ff; }
+    .cmt { color: #4a5570; font-style: italic; }
+    .str { color: #3ddc84; }
+    .num { color: #ffd166; }
+
+    /* ─────────── WEAPON SYSTEM ─────────── */
+    .weapon-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .weapon-icon { font-size: 28px; }
+    .weapon-name { font-size: 15px; font-weight: 700; color: #fff; }
+    .weapon-desc { font-size: 12px; color: var(--muted); }
+    .weapon-tag  { align-self: flex-start; }
+
+    /* ─────────── COLOR GUIDE ─────────── */
+    .color-guide {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cg-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .cg-swatch {
+      width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+    }
+    .cg-label { font-weight: 700; font-size: 14px; }
+    .cg-desc  { font-size: 13px; color: var(--muted); flex: 1; }
+    .cg-weapon { font-size: 12px; font-weight: 600; color: var(--text); }
+
+    /* ─────────── CALLOUT ─────────── */
+    .callout {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin-bottom: 14px;
+    }
+    .callout.warn  { border-left: 3px solid var(--accent4); }
+    .callout.info  { border-left: 3px solid var(--accent1); }
+    .callout.danger{ border-left: 3px solid var(--accent2); }
+    .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .callout-body p { font-size: 13px; color: var(--text); }
+    .callout-body strong { color: #fff; }
+
+    /* ─────────── REF GAME ─────────── */
+    .ref-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .ref-icon { font-size: 28px; flex-shrink: 0; }
+    .ref-game { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .ref-part { font-size: 12px; color: var(--muted); }
+
+    /* ─────────── KEYLINE ─────────── */
+    .keyline {
+      text-align: center;
+      margin: 48px 0;
+      position: relative;
+    }
+    .keyline::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+    .keyline-text {
+      position: relative;
+      display: inline-block;
+      background: var(--bg);
+      padding: 0 20px;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─────────── FOOTER ─────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer span { color: var(--accent1); }
+
+    /* ─────────── QUOTE ─────────── */
+    blockquote {
+      background: linear-gradient(90deg, rgba(0,229,200,.08), transparent);
+      border-left: 3px solid var(--accent1);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 16px 22px;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--text);
+      margin: 20px 0;
+    }
+    blockquote strong { color: var(--accent1); font-style: normal; }
+
+    /* ─────────── HIGHLIGHT ─────────── */
+    .hl-cyan   { color: var(--accent1); font-weight: 700; }
+    .hl-red    { color: var(--accent2); font-weight: 700; }
+    .hl-purple { color: var(--accent3); font-weight: 700; }
+    .hl-yellow { color: var(--accent4); font-weight: 700; }
+    .hl-green  { color: var(--green);   font-weight: 700; }
+
+    ul.styled li { font-size: 13px; margin-bottom: 7px; padding-left: 16px; position: relative; list-style: none; }
+    ul.styled li::before { content: '▸'; position: absolute; left: 0; color: var(--accent1); }
+
+    p { font-size: 14px; color: var(--text); line-height: 1.8; }
+
+    /* ─────────── NOTICE BANNER ─────────── */
+    .notice {
+      background: linear-gradient(135deg, rgba(255,79,94,.1), rgba(176,108,255,.1));
+      border: 1px solid rgba(255,79,94,.3);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .notice-icon { font-size: 24px; }
+    .notice p { margin: 0; font-size: 13px; }
+
+    /* ─────────── PROGRESS BAR (위험도) ─────────── */
+    .danger-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .danger-bar {
+      display: flex;
+      gap: 2px;
+    }
+    .db { width: 12px; height: 10px; border-radius: 2px; background: var(--border); }
+    .db.filled-1 { background: var(--green); }
+    .db.filled-2 { background: var(--accent4); }
+    .db.filled-3 { background: #ff9a3c; }
+    .db.filled-4 { background: var(--accent2); }
+    .db.filled-5 { background: var(--accent3); box-shadow: 0 0 6px var(--accent3); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-badge">Team Project · Game Design Document</div>
+  <h1>지상 <span>정화</span> 작전<br><small style="font-size:.45em;color:var(--muted);font-weight:400;letter-spacing:0">Operation Surface Purification</small></h1>
+  <p class="hero-sub">GHS 위험물질로 변이된 인류를 SDS 정화 무기로 구해내라.<br>지하 벙커에서 출발해 오염된 공장을 되살리는 생존형 RPG.</p>
+  <div class="hero-meta">
+    <span>플랫폼 <b>PC (Windows)</b></span>
+    <span>장르 <b>1인칭 생존 RPG</b></span>
+    <span>엔진 <b>Unity 2D</b></span>
+    <span>팀 규모 <b>3~4명</b></span>
+    <span>개발 기간 <b>13일</b></span>
+  </div>
+</section>
+
+<!-- ═══════════════ TOC ═══════════════ -->
+<div class="toc-wrap">
+  <nav class="toc">
+    <h2>목 차</h2>
+    <ol>
+      <li><a href="#overview">프로젝트 개요</a></li>
+      <li><a href="#story">세계관 &amp; 스토리</a></li>
+      <li><a href="#loop">핵심 게임 루프</a></li>
+      <li><a href="#scenes">씬 구성 (UI)</a></li>
+      <li><a href="#systems">확정 시스템</a></li>
+      <li><a href="#dataset">GHS + SDS 전투 데이터셋</a></li>
+      <li><a href="#weapons">무기 시스템</a></li>
+      <li><a href="#color">직관성 색상 가이드</a></li>
+      <li><a href="#code">전투 로직 (코드 스니펫)</a></li>
+      <li><a href="#references">참고 게임</a></li>
+      <li><a href="#cautions">주의사항</a></li>
+    </ol>
+  </nav>
+</div>
+
+<!-- ═══════════════ CONTENT ═══════════════ -->
+<div class="container">
+
+  <!-- § 1 · 개요 -->
+  <section class="section" id="overview">
+    <div class="section-label">
+      <div class="num">1</div>
+      <h2>프로젝트 개요</h2>
+      <div class="line"></div>
+    </div>
+    <div class="grid-3">
+      <div class="ov-card" data-icon="🎮">
+        <h3>장르</h3>
+        <p>1인칭 생존 RPG<br>PC 단일 플랫폼</p>
+      </div>
+      <div class="ov-card" data-icon="🏭">
+        <h3>배경</h3>
+        <p>핵폭발 이후 오염된 지상 공장 &amp; 지하 벙커</p>
+      </div>
+      <div class="ov-card" data-icon="🧪">
+        <h3>핵심 키워드</h3>
+        <p>정화 / 포획 / 탐사 / 귀환</p>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <blockquote>
+        <strong>"GHS로 위험을 읽고, SDS로 해결하는 게임"</strong><br>
+        화학물질 위험 정보를 실제 게임 메커니즘에 녹여낸 교육적 서사의 생존 RPG
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- § 2 · 스토리 -->
+  <section class="section" id="story">
+    <div class="section-label">
+      <div class="num">2</div>
+      <h2>세계관 &amp; 스토리</h2>
+      <div class="line"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">배경 설정</div>
+      <p>
+        지상의 <span class="hl-red">화학물질 탐사소</span>가 핵폭탄 사건으로 폭발하면서 지상은 극도로 오염된다.
+        살아남은 인류는 <span class="hl-cyan">지하 벙커</span>를 건설해 생활하지만, 결국 오염된 지상을 되찾고자 한다.
+        플레이어는 <span class="hl-yellow">지상 조사단</span> 일원으로서 오염된 공장에 진입해 변이 몬스터를 정화하고 귀환하는 미션을 수행한다.
+      </p>
+    </div>
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <div class="card-title">플레이어 정체</div>
+        <ul class="styled">
+          <li>지상 조사단 소속 요원</li>
+          <li>화학물질 방호복 착용</li>
+          <li>SDS(안전보건자료) 기반 정화 무기 사용</li>
+          <li>벙커에서 장비 수리·강화 후 출동</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">몬스터 정체</div>
+        <ul class="styled">
+          <li>GHS 화학물질에 노출된 변이 동물</li>
+          <li>화학물질에 오염된 연구원</li>
+          <li>각 GHS 유형별 고유 외형·패턴 보유</li>
+          <li>정화 성공 시 인간으로 복귀</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 3 · 게임 루프 -->
+  <section class="section" id="loop">
+    <div class="section-label">
+      <div class="num">3</div>
+      <h2>핵심 게임 루프</h2>
+      <div class="line"></div>
+    </div>
+    <div class="flow">
+      <div class="flow-step">🏗️ 벙커 출발</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">🏭 공장 탐사</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">⚔️ 전투 돌입</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">🧪 정화 완료</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">📦 아이템 획득</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">🔬 귀환·성장</div>
+    </div>
+    <div class="grid-2" style="margin-top:16px">
+      <div class="card">
+        <div class="card-title">전투 전 (탐사 루프)</div>
+        <ul class="styled">
+          <li>공장 필드를 상하좌우 자유롭게 이동</li>
+          <li>제한된 시야 속에서 오브젝트 탐색</li>
+          <li>불 아이템으로 시야 확장 가능</li>
+          <li>몬스터 조우 시 전투 씬 전환</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">전투 후 (성장 루프)</div>
+        <ul class="styled">
+          <li>정화된 몬스터 → 화학물질/아이템 드롭</li>
+          <li>인벤토리에 아이템 수집</li>
+          <li>벙커에서 무기·방어구 수리·강화</li>
+          <li>맵 전체가 점차 정화된 환경으로 변화</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 4 · 씬 구성 -->
+  <section class="section" id="scenes">
+    <div class="section-label">
+      <div class="num">4</div>
+      <h2>씬 구성 (UI)</h2>
+      <div class="line"></div>
+    </div>
+    <div class="grid-2">
+      <div class="scene-card">
+        <div class="scene-card-head factory">🏭 공장 필드 씬 (이동 화면)</div>
+        <div class="scene-card-body">
+          <ul>
+            <li>도트 기반 2D 탑다운 or 사이드뷰 필드</li>
+            <li>맵 이동 UI (미니맵 또는 구역 표시)</li>
+            <li>시야 제한 UI — 화면 외곽 어둠 처리</li>
+            <li>불 아이템 사용 시 시야 반경 확장</li>
+            <li>몬스터 조우 이펙터 (접촉 또는 일정 범위)</li>
+            <li>인벤토리 퀵 접근 버튼</li>
+          </ul>
+        </div>
+      </div>
+      <div class="scene-card">
+        <div class="scene-card-head battle">⚔️ 전투 씬 (1:1 화면)</div>
+        <div class="scene-card-body">
+          <ul>
+            <li>1:1 전투 화면으로 씬 전환</li>
+            <li>선택지 창 (전투 / 아이템 / 도망)</li>
+            <li>플레이어 도트 스프라이트</li>
+            <li>몬스터 도트 스프라이트 (GHS 유형별 고유)</li>
+            <li>몬스터 <span class="hl-red">오염 게이지 UI</span> (HP 대신)</li>
+            <li>정화 게이지 0 → <span class="hl-green">포획 가능</span> 표시</li>
+            <li>정화 성공 텍스트: "정상 상태로 복귀했습니다."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 5 · 확정 시스템 -->
+  <section class="section" id="systems">
+    <div class="section-label">
+      <div class="num">5</div>
+      <h2>확정 시스템</h2>
+      <div class="line"></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">🎒 인벤토리 시스템</div>
+        <ul class="styled">
+          <li>아이템 획득 시 인벤토리에 수동 배치</li>
+          <li>화학물질, 무기, 장비 슬롯 구분</li>
+          <li>타르코프 참고: 상자 오브젝트에서 장비 발견</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🗺️ 듀얼 씬 전환</div>
+        <ul class="styled">
+          <li>이동 화면 ↔ 전투 화면 분리</li>
+          <li>몬스터 조우 이펙터로 전투 씬 트리거</li>
+          <li>포켓몬 DS 스타일 전투 전환 연출</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🌿 맵 정화 변화</div>
+        <ul class="styled">
+          <li>몬스터 정화 수에 따라 맵 비주얼 변화</li>
+          <li>오염 → 중간 → 정화 3단계 타일 교체</li>
+          <li>플레이어에게 성취감과 시각적 피드백 제공</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🔧 무기·장비 강화</div>
+        <ul class="styled">
+          <li>벙커 메인 메뉴에서 수리 및 강화</li>
+          <li>타르코프 참고: 수리 비용 = 수집 화학물질</li>
+          <li>강화 단계별 효과 상승 (정화 효율 +)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">⚔️ 오염 게이지 전투</div>
+        <ul class="styled">
+          <li>몬스터 HP → <span class="hl-red">오염 게이지</span>로 대체</li>
+          <li>올바른 무기로 공격 시 게이지 감소</li>
+          <li>틀린 무기 사용 시 플레이어 패널티</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">📦 포획 시스템</div>
+        <ul class="styled">
+          <li>오염 게이지 = 0 시 포획 가능 상태 활성화</li>
+          <li>몬스터 헌터 참고: 갈무리 → 인벤토리 수납</li>
+          <li>포획 성공 = "정상 상태로 복귀" 연출</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 6 · 전투 데이터셋 -->
+  <section class="section" id="dataset">
+    <div class="section-label">
+      <div class="num">6</div>
+      <h2>GHS + SDS 전투 데이터셋</h2>
+      <div class="line"></div>
+    </div>
+    <p style="margin-bottom:20px">각 몬스터는 실제 GHS(화학물질 국제조화시스템) 위험 유형을 기반으로 설계되며, 대응 무기는 SDS(안전보건자료)의 처리 방법에서 도출됩니다.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>GHS 유형</th>
+            <th>색상</th>
+            <th>위험 물질</th>
+            <th>위험도</th>
+            <th>위치</th>
+            <th>몬스터 타입</th>
+            <th>전투 패턴</th>
+            <th>정화 방법(SDS)</th>
+            <th>정화 효과</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">01</td>
+            <td><span class="badge badge-green">GHS05 부식성</span></td>
+            <td><span style="color:var(--green)">●</span> 초록</td>
+            <td>염산</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-2"></div><div class="db"></div><div class="db"></div><div class="db"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>배관 점검실</td>
+            <td>피부가 녹아내리는 직원</td>
+            <td>산성 장판 생성</td>
+            <td><span class="badge badge-green">중화제</span></td>
+            <td>장판 제거 + 오염 감소</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">02</td>
+            <td><span class="badge badge-green">GHS05 부식성</span></td>
+            <td><span style="color:var(--green)">●</span> 초록</td>
+            <td>황산 미스트</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-3"></div><div class="db filled-3"></div><div class="db filled-3"></div><div class="db"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>배터리 처리실</td>
+            <td>산성 안개에 뒤덮인 직원</td>
+            <td>시야 차단 안개</td>
+            <td><span class="badge badge-green">중화 + 흡착</span></td>
+            <td>시야 회복</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">03</td>
+            <td><span class="badge badge-purple">GHS06 독성</span></td>
+            <td><span style="color:var(--accent3)">●</span> 보라</td>
+            <td>염소</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-3"></div><div class="db filled-3"></div><div class="db filled-3"></div><div class="db"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>소독 약품 저장소</td>
+            <td>질식 상태 직원</td>
+            <td>독안개 분사</td>
+            <td><span class="badge badge-purple">환기 + 흡착</span></td>
+            <td>독 제거</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">04</td>
+            <td><span class="badge badge-purple">GHS06 독성</span></td>
+            <td><span style="color:var(--accent3)">●</span> 보라</td>
+            <td>암모니아</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-4"></div><div class="db filled-4"></div><div class="db filled-4"></div><div class="db filled-4"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>냉각 설비실</td>
+            <td>호흡기 손상 직원</td>
+            <td>질식 구역 생성</td>
+            <td><span class="badge badge-purple">희석 + 환기</span></td>
+            <td>안전 구역 생성</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">05</td>
+            <td><span class="badge badge-red">GHS02 인화성</span></td>
+            <td><span style="color:var(--accent2)">●</span> 빨강</td>
+            <td>벤젠</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-2"></div><div class="db filled-2"></div><div class="db"></div><div class="db"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>원료 저장 구역</td>
+            <td>불안정 상태 직원</td>
+            <td>폭발 흔적 생성</td>
+            <td><span class="badge badge-red">냉각 + 차단</span></td>
+            <td>폭발 위험 제거</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">06</td>
+            <td><span class="badge badge-red">GHS02 인화성</span></td>
+            <td><span style="color:var(--accent2)">●</span> 빨강</td>
+            <td>톨루엔</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-2"></div><div class="db filled-2"></div><div class="db"></div><div class="db"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>도료 혼합실</td>
+            <td>휘발성 중독 직원</td>
+            <td>빠른 돌진</td>
+            <td><span class="badge badge-red">환기 + 냉각</span></td>
+            <td>속도 감소</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">07</td>
+            <td><span class="badge badge-yellow">GHS07 자극성</span></td>
+            <td><span style="color:var(--accent4)">●</span> 노랑</td>
+            <td>포름알데히드</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-1"></div><div class="db"></div><div class="db"></div><div class="db"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>사무동 보관실</td>
+            <td>피부/눈 자극 직원</td>
+            <td>시야 흐림</td>
+            <td><span class="badge badge-yellow">환기</span></td>
+            <td>시야 회복</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">08</td>
+            <td><span class="badge badge-yellow">GHS07 자극성</span></td>
+            <td><span style="color:var(--accent4)">●</span> 노랑</td>
+            <td>아황산가스</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-3"></div><div class="db filled-3"></div><div class="db filled-3"></div><div class="db"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>가스 처리 라인</td>
+            <td>기침 반복 직원</td>
+            <td>충격파</td>
+            <td><span class="badge badge-yellow">흡수제</span></td>
+            <td>패턴 약화</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">09</td>
+            <td><span class="badge badge-blue">GHS09 환경유해</span></td>
+            <td><span style="color:var(--blue)">●</span> 파랑</td>
+            <td>폐수 오염</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-3"></div><div class="db filled-3"></div><div class="db filled-3"></div><div class="db"></div><div class="db"></div>
+              </div>
+            </td>
+            <td>폐수 처리조</td>
+            <td>액체형 변이 직원</td>
+            <td>바닥 확산</td>
+            <td><span class="badge badge-blue">흡착</span></td>
+            <td>확산 차단</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">10</td>
+            <td><span class="badge badge-dark">복합 위험 BOSS</span></td>
+            <td><span style="color:#aaa">●</span> 검정</td>
+            <td>복합 누출</td>
+            <td>
+              <div class="danger-bar">
+                <div class="db filled-5"></div><div class="db filled-5"></div><div class="db filled-5"></div><div class="db filled-5"></div><div class="db filled-5"></div>
+              </div>
+            </td>
+            <td>중앙 반응로</td>
+            <td>최종 변이체</td>
+            <td>혼합 공격</td>
+            <td><span class="badge badge-dark">환기→중화→흡착 순차</span></td>
+            <td>단계별 약화</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- § 7 · 무기 시스템 -->
+  <section class="section" id="weapons">
+    <div class="section-label">
+      <div class="num">7</div>
+      <h2>무기 시스템 (최소 구현)</h2>
+      <div class="line"></div>
+    </div>
+    <p style="margin-bottom:20px">초보 팀 기준으로 <strong>3가지 핵심 무기</strong>만으로 충분히 구현 가능. 나머지는 조합 UI로 표현.</p>
+    <div class="grid-3">
+      <div class="weapon-card">
+        <div class="weapon-icon">🟢</div>
+        <div class="weapon-name">중화제 (Neutralizer)</div>
+        <div class="weapon-desc">산·염기 오염에 효과적. 부식성(GHS05) 몬스터 특효. 장판 제거 및 오염 구역 무력화.</div>
+        <span class="badge badge-green weapon-tag">부식성 특효</span>
+      </div>
+      <div class="weapon-card">
+        <div class="weapon-icon">🟣</div>
+        <div class="weapon-name">환기 장치 (Ventilator)</div>
+        <div class="weapon-desc">가스·독성 오염에 효과적. 독성(GHS06), 자극성(GHS07) 몬스터 특효. 독안개 및 질식 구역 해제.</div>
+        <span class="badge badge-purple weapon-tag">독성 특효</span>
+      </div>
+      <div class="weapon-card">
+        <div class="weapon-icon">🔵</div>
+        <div class="weapon-name">흡착제 (Adsorbent)</div>
+        <div class="weapon-desc">액체·확산 오염에 효과적. 환경유해성(GHS09) 몬스터 특효. 바닥 확산 및 액체형 공격 차단.</div>
+        <span class="badge badge-blue weapon-tag">환경유해 특효</span>
+      </div>
+    </div>
+    <div class="notice" style="margin-top:20px">
+      <div class="notice-icon">🚫</div>
+      <p><strong>중요:</strong> 화학물질 무기로 적을 <span class="hl-red">직접 처치하면 안 됩니다.</span> 오염 게이지를 0으로 낮춰 <span class="hl-green">정화·포획</span>하는 것이 목표. "화학물질을 안전하게 다루자"는 핵심 메시지를 유지해야 합니다.</p>
+    </div>
+  </section>
+
+  <!-- § 8 · 색상 가이드 -->
+  <section class="section" id="color">
+    <div class="section-label">
+      <div class="num">8</div>
+      <h2>직관성 색상 가이드</h2>
+      <div class="line"></div>
+    </div>
+    <p style="margin-bottom:20px">플레이어가 생각 없이도 맞출 수 있는 구조. GHS 아이콘 색상 = 무기 선택 힌트.</p>
+    <div class="color-guide">
+      <div class="cg-row">
+        <div class="cg-swatch" style="background:var(--green)"></div>
+        <div class="cg-label" style="color:var(--green)">초록 (GHS05 부식성)</div>
+        <div class="cg-desc">염산, 황산 미스트 — 산성 장판·안개 공격</div>
+        <div class="cg-weapon">→ 🟢 중화제 사용</div>
+      </div>
+      <div class="cg-row">
+        <div class="cg-swatch" style="background:var(--accent3)"></div>
+        <div class="cg-label" style="color:var(--accent3)">보라 (GHS06 독성)</div>
+        <div class="cg-desc">염소, 암모니아 — 독안개·질식 구역 공격</div>
+        <div class="cg-weapon">→ 🟣 환기 장치 사용</div>
+      </div>
+      <div class="cg-row">
+        <div class="cg-swatch" style="background:var(--accent2)"></div>
+        <div class="cg-label" style="color:var(--accent2)">빨강 (GHS02 인화성)</div>
+        <div class="cg-desc">벤젠, 톨루엔 — 폭발·돌진 공격</div>
+        <div class="cg-weapon">→ 🔴 냉각 장치 사용</div>
+      </div>
+      <div class="cg-row">
+        <div class="cg-swatch" style="background:var(--accent4)"></div>
+        <div class="cg-label" style="color:var(--accent4)">노랑 (GHS07 자극성)</div>
+        <div class="cg-desc">포름알데히드, 아황산가스 — 시야 흐림·충격파</div>
+        <div class="cg-weapon">→ 🟡 환기 + 흡수제 사용</div>
+      </div>
+      <div class="cg-row">
+        <div class="cg-swatch" style="background:var(--blue)"></div>
+        <div class="cg-label" style="color:var(--blue)">파랑 (GHS09 환경유해)</div>
+        <div class="cg-desc">폐수 오염 — 바닥 확산 공격</div>
+        <div class="cg-weapon">→ 🔵 흡착제 사용</div>
+      </div>
+      <div class="cg-row">
+        <div class="cg-swatch" style="background:#555; box-shadow:0 0 8px #b06cff"></div>
+        <div class="cg-label" style="color:#bbb">검정 (복합 위험 BOSS)</div>
+        <div class="cg-desc">중앙 반응로 최종 변이체 — 혼합 패턴</div>
+        <div class="cg-weapon">→ 순차 정화 (환기→중화→흡착)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 9 · 코드 스니펫 -->
+  <section class="section" id="code">
+    <div class="section-label">
+      <div class="num">9</div>
+      <h2>전투 로직 코드 스니펫</h2>
+      <div class="line"></div>
+    </div>
+    <p style="margin-bottom:16px">Unity C# 기준 핵심 전투 구조. 초보 팀이 바로 참고할 수 있도록 최소화된 로직.</p>
+    <pre><span class="cmt">// 오염 게이지 기반 전투 핵심 로직</span>
+<span class="kw">public class</span> <span class="typ">BattleManager</span> : MonoBehaviour
+{
+    <span class="kw">public</span> <span class="typ">float</span> contaminationGauge = <span class="num">100f</span>; <span class="cmt">// HP 대신 오염 게이지</span>
+    <span class="kw">public</span> <span class="typ">float</span> playerHP       = <span class="num">100f</span>;
+    <span class="kw">public</span> <span class="typ">float</span> purifyDamage   = <span class="num">20f</span>;
+    <span class="kw">public</span> <span class="typ">float</span> wrongPenalty   = <span class="num">10f</span>; <span class="cmt">// 틀린 무기 사용 시 플레이어 피해</span>
+
+    <span class="kw">public void</span> UseWeapon(<span class="typ">WeaponType</span> weaponType, <span class="typ">MonsterData</span> monster)
+    {
+        <span class="kw">if</span> (weaponType == monster.weakWeaponType)
+        {
+            <span class="cmt">// 올바른 무기 → 오염 게이지 감소</span>
+            contaminationGauge -= purifyDamage;
+            Debug.Log(<span class="str">"정화 진행 중..."</span>);
+        }
+        <span class="kw">else</span>
+        {
+            <span class="cmt">// 틀린 무기 → 플레이어에게 페널티</span>
+            playerHP -= wrongPenalty;
+            Debug.Log(<span class="str">"잘못된 처리 방법입니다!"</span>);
+        }
+
+        CheckPurification();
+    }
+
+    <span class="kw">private void</span> CheckPurification()
+    {
+        <span class="kw">if</span> (contaminationGauge &lt;= <span class="num">0f</span>)
+        {
+            <span class="cmt">// 오염 게이지 0 → 포획 가능</span>
+            Debug.Log(<span class="str">"정상 상태로 복귀했습니다."</span>);
+            EnableCapture();
+        }
+    }
+}</pre>
+
+    <pre style="margin-top:16px"><span class="cmt">// 몬스터 데이터 구조</span>
+<span class="kw">public enum</span> <span class="typ">WeaponType</span>
+{
+    Neutralizer,  <span class="cmt">// 중화제  — GHS05 부식성 특효</span>
+    Ventilator,   <span class="cmt">// 환기    — GHS06/07 독성·자극성 특효</span>
+    Adsorbent     <span class="cmt">// 흡착제  — GHS09 환경유해 특효</span>
+}
+
+[<span class="typ">System.Serializable</span>]
+<span class="kw">public class</span> <span class="typ">MonsterData</span>
+{
+    <span class="kw">public</span> <span class="typ">string</span>     monsterName;
+    <span class="kw">public</span> <span class="typ">WeaponType</span> weakWeaponType; <span class="cmt">// Inspector에서 지정</span>
+    <span class="kw">public</span> <span class="typ">float</span>      maxContamination;
+    <span class="kw">public</span> <span class="typ">Sprite</span>     monsterSprite;   <span class="cmt">// GHS 유형별 고유 도트 이미지</span>
+}</pre>
+  </section>
+
+  <!-- § 10 · 참고 게임 -->
+  <section class="section" id="references">
+    <div class="section-label">
+      <div class="num">10</div>
+      <h2>참고 게임</h2>
+      <div class="line"></div>
+    </div>
+    <div class="grid-2">
+      <div class="ref-card">
+        <div class="ref-icon">🎮</div>
+        <div>
+          <div class="ref-game">승리의 여신: 니케</div>
+          <div class="ref-part">참고 요소: 지하 벙커로 도망쳐 지상탈환을 계획하는 세계관 구조</div>
+        </div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-icon">⛏️</div>
+        <div>
+          <div class="ref-game">테라리아 (Terraria)</div>
+          <div class="ref-part">참고 요소: 전체적인 도트 필드 이미지 + 2D 사이드뷰 맵 비주얼</div>
+        </div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-icon">🎴</div>
+        <div>
+          <div class="ref-game">포켓몬스터 DS 시절</div>
+          <div class="ref-part">참고 요소: 게임 전투 씬 구성 (1:1 캐릭터 배치, 선택지 창, 전환 연출)</div>
+        </div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-icon">🔫</div>
+        <div>
+          <div class="ref-game">이스케이프 프롬 타르코프</div>
+          <div class="ref-part">참고 요소: 메인 메뉴 무기 수리·강화 시스템 + 상자 오브젝트에서 장비 습득</div>
+        </div>
+      </div>
+      <div class="ref-card">
+        <div class="ref-icon">🦕</div>
+        <div>
+          <div class="ref-game">몬스터 헌터</div>
+          <div class="ref-part">참고 요소: 몬스터 처치 후 갈무리하여 인벤토리에 수납하는 포획 시스템</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 11 · 주의사항 -->
+  <section class="section" id="cautions">
+    <div class="section-label">
+      <div class="num">11</div>
+      <h2>주의사항 &amp; 개발 제약</h2>
+      <div class="line"></div>
+    </div>
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <p><strong>화학물질 무기로 적을 직접 처치 금지</strong><br>
+        화학물질을 안전하게 다루자는 게임의 핵심 메시지가 사라집니다. 오직 오염 게이지를 낮춰 정화·포획하는 방식으로만 진행.</p>
+      </div>
+    </div>
+    <div class="callout info">
+      <div class="callout-icon">👥</div>
+      <div class="callout-body">
+        <p><strong>초보자 3~4명, 13일 개발 분량으로 설계</strong><br>
+        과도한 시스템 추가 금지. 무기 3종, 씬 2개, 몬스터 10종 이내의 최소 구현 원칙을 유지. 추가 기능은 기본 루프 완성 후 검토.</p>
+      </div>
+    </div>
+    <div class="callout danger">
+      <div class="callout-icon">🎨</div>
+      <div class="callout-body">
+        <p><strong>몬스터 이미지 중복 금지</strong><br>
+        각 몬스터는 GHS 유형별 고유 외형을 가져야 합니다. 같은 도트 스프라이트 재사용 시 몬스터 개성이 사라져 전투 직관성이 저하됩니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="keyline">
+    <span class="keyline-text">End of Document</span>
+  </div>
+
+  <blockquote style="text-align:center;font-size:18px">
+    <strong>"GHS로 위험을 읽고, SDS로 해결하는 게임"</strong><br>
+    <span style="font-size:13px;color:var(--muted);font-style:normal">지상 정화 작전 — Team Project Game Design Document</span>
+  </blockquote>
+
+</div><!-- /container -->
+
+<footer>
+  <p>지상 정화 작전 · Unity 팀 프로젝트 기획서 &nbsp;·&nbsp; <span>2026</span></p>
+  <p style="margin-top:6px;font-size:11px">GHS (Globally Harmonized System) + SDS (Safety Data Sheet) 기반 게임 설계</p>
+</footer>
+
+</body>
+</html>

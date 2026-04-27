@@ -52,31 +52,40 @@ public class GameManager : MonoBehaviour
 
     private void CreateEnemy()
     {
-        if (enemies == null || enemies.Length == 0)
-            return;
+        if (ObjectManager.Instance == null) return;
 
-        GameObject prefab = enemies[Random.Range(0, enemies.Length)];
-        var dice = Random.Range(0, 2); 
+        // 스폰 방식 결정: 0 = 위에서 하강, 1 = 사이드 진입
+        int dice = Random.Range(0, 2);
 
-        GameObject enemyGo = Instantiate(prefab);
-        var enemy = enemyGo.GetComponent<Enemy>();
-        
+        Vector3 spawnPos;
+        Vector2 moveDir;
+
         if (dice == 0)
         {
+            // 위쪽 스폰 포인트 중 랜덤 선택
             if (spawnPoints == null || spawnPoints.Length == 0) return;
-
-            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-            enemyGo.transform.position = spawnPoint.position;
-            enemy.StartMove(Vector2.down);
+            spawnPos = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
+            moveDir  = Vector2.down; // 아래로 내려옵니다
         }
         else
         {
+            // 사이드 스포너 중 랜덤 선택
             if (spawners == null || spawners.Length == 0) return;
-
             EnemySpawner spawner = spawners[Random.Range(0, spawners.Length)];
-            enemyGo.transform.position = spawner.startPoint.position;
-            enemy.StartMove(spawner.GetDir().normalized);
+            spawnPos = spawner.startPoint.position;
+            moveDir  = spawner.GetDir().normalized;
         }
+
+        // 적 종류 랜덤 선택: 0=대형(L), 1=중형(M), 2=소형(S)
+        // Instantiate 대신 ObjectManager 풀에서 꺼냅니다
+        int enemyType = Random.Range(0, 3);
+        GameObject enemyGo = enemyType == 0 ? ObjectManager.Instance.GetEnemyL(spawnPos) :
+                             enemyType == 1 ? ObjectManager.Instance.GetEnemyM(spawnPos) :
+                                              ObjectManager.Instance.GetEnemyS(spawnPos);
+
+        Enemy enemy = enemyGo.GetComponent<Enemy>();
+        if (enemy != null)
+            enemy.StartMove(moveDir); // 이동 방향 전달
     }
     
     public void AddScore(int amount)

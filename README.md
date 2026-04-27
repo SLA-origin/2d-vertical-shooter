@@ -1,126 +1,158 @@
-# 2D Vertical Shooter
+# 🚀 2D Vertical Shooter
 
-Unity로 제작한 2D 종스크롤 슈팅 게임 프로젝트입니다.  
-플레이어 이동/연사, 적 자동 스폰, 피격 및 라이프 UI, 게임오버/재시작 흐름이 구현되어 있습니다.
+Unity로 제작한 2D 종스크롤 슈팅 게임입니다.
 
-## 1. 프로젝트 개요
+---
 
-- 장르: 2D Vertical Shooting
-- 엔진: Unity 6 (6000.4.1f1)
-- 핵심 플레이:
-	- 플레이어가 화면 내에서 이동하며 자동 연사
-	- 일정 주기로 적이 생성되어 하강/측면 진입
-	- 적 처치 시 점수 획득, 피격 시 라이프 감소
-	- 라이프 소진 시 게임오버 패널 표시
+## 📖 프로젝트 소개
 
-## 2. 주요 기능
+플레이어가 위에서 내려오는 적기들을 피하고 격추하며 생존하는 종스크롤 슈팅 게임입니다.  
+파워 아이템으로 무기를 강화하고, 폭탄(Boom)으로 위기를 탈출하세요.
 
-- 플레이어
-	- 8방향 이동(대각선 정규화)
-	- 발사 패턴 3단계(power 1~3)
-	- 리스폰 및 무적 시간 처리
-- 적
-	- 타입 A/B/C
-	- 타입 C는 플레이어를 조준해 총알 발사
-	- 피격 시 스프라이트 피드백, 체력 0 이하 시 제거
-- 스폰
-	- `GameManager`의 타이머 기반 자동 스폰
-	- 상단 하강 스폰 + 좌/우 측면 스폰 혼합
-- UI
-	- 점수 텍스트 업데이트
-	- 라이프 이미지 알파 처리
-	- 게임오버 패널 + Retry 버튼
-- 경계 처리
-	- `AreaDrawer` 기준으로 화면 밖 오브젝트 제거
+---
 
-## 3. 조작법
+## 🛠️ 개발 환경
 
-- 이동: `WASD` 또는 방향키
-- 발사: 마우스 왼쪽 버튼 홀드
-- 재시작: 게임오버 패널의 `Retry` 버튼
+| 항목 | 내용 |
+|------|------|
+| 엔진 | Unity 6 (6000.4.1f1) |
+| 언어 | C# |
+| 렌더 파이프라인 | Universal Render Pipeline (URP) |
+| 플랫폼 | PC (Windows) |
 
-## 4. 핵심 스크립트
+---
 
-- `Assets/Player.cs`
-	- 입력, 이동, 발사 패턴, 피격/사망/리스폰 관리
-- `Assets/Enemy.cs`
-	- 적 이동, 타입별 행동, 피격/점수 처리, 타입 C 발사
-- `Assets/EnemyBullet.cs`
-	- 적 총알 이동 및 화면 이탈 제거
-- `Assets/PlayerBullet.cs`
-	- 플레이어 총알 이동 및 화면 이탈 제거
-	- 적 총알과 충돌 시 무시 처리
-- `Assets/GameManager.cs`
-	- 점수/라이프/게임오버 상태 관리
-	- 자동 스폰 타이머 및 적 생성 루틴
-- `Assets/UIManager.cs`
-	- HUD 갱신, 게임오버 표시, 재시작
-- `Assets/AreaDrawer.cs`
-	- 플레이 영역 경계 계산 및 Gizmo 표시
-- `Assets/EnemySpawner.cs`
-	- 측면 스폰 방향 벡터 제공
+## 🎮 조작법
 
-## 5. 씬 세팅 체크리스트
+| 입력 | 동작 |
+|------|------|
+| `W A S D` / 방향키 | 플레이어 이동 |
+| 마우스 **좌클릭** | 총알 발사 (클릭 즉시 발사 + 꾹 누르면 연속 발사) |
+| 마우스 **우클릭** | 폭탄(Boom) 사용 — 화면 중앙에 폭발 연출 |
 
-### 필수 오브젝트
+---
 
-- `GameManager` 오브젝트
-	- `enemies`, `spawnPoints`, `spawners` 할당
-- `UIManager` 오브젝트
-	- `lifeImages`, `scoreText`, `gameOverPanel` 연결
-- `AreaDrawer` 오브젝트
-	- `topLeft`, `topRight`, `bottomLeft`, `bottomRight` 연결
-- 플레이어 오브젝트
-	- 태그: `Player`
-	- `Player` 스크립트의 `firePoint`, 총알 프리팹 연결
+## ✨ 주요 기능
 
-### 프리팹/태그 권장
+### 🔫 무기 시스템 (Power 레벨)
+| 레벨 | 발사 패턴 |
+|------|-----------|
+| Power 1 | 중앙 단발 |
+| Power 2 | 좌우 2발 동시 발사 |
+| Power 3 | 중앙 강화탄 + 좌우 2발 |
 
-- 플레이어 총알: 태그 `PlayerBullet`
-- 적 총알: 태그 `EnemyBullet`
-- 적 오브젝트: 태그 `Enemy`
+### 💥 Boom (폭탄) 시스템
+- 마우스 우클릭 시 화면 중앙에 2초간 폭발 애니메이션 재생
+- 콘솔에 "폭발 발생!" 로그 출력
 
-## 6. 실행 방법
+### 👾 적기 시스템
+- **Enemy A / B / C** 3종 — 각각 고유 이동 패턴 보유
+- 위쪽 스폰 포인트에서 하강 또는 사이드에서 진입
+- 일정 간격으로 자동 생성 (GameManager 타이머 기반)
+- 격추 시 점수 지급: A=100점 / B=200점 / C=300점
+- Enemy C: 플레이어를 향해 자동 조준 발사
 
-1. Unity Hub에서 프로젝트 폴더를 엽니다.
-2. Unity Editor 버전은 `6000.4.1f1` 사용을 권장합니다.
-3. 메인 씬을 열고 Play 버튼으로 실행합니다.
+### 🎁 아이템 시스템
+- **Coin** — 스코어 +1000
+- **Power** — 스코어 +500 / 파워 레벨 +1 (MAX 3)
+- **Boom** — 스코어 +500 / 폭탄 카운트 +1 (MAX 3)
 
-## 7. 게임 로직 흐름
+### 🔄 오브젝트 풀링 (Object Pooling)
+`ObjectManager` 싱글톤이 모든 오브젝트를 풀로 관리합니다.  
+`Instantiate` / `Destroy` 대신 `SetActive` 재사용으로 GC 스파이크 없이 성능 최적화.
 
-1. 게임 시작 시 `GameManager`가 UI를 초기화합니다.
-2. 일정 주기(`spawnInterval`)로 적을 생성합니다.
-3. 플레이어는 이동하면서 연사하고, 적은 타입별로 이동/공격합니다.
-4. 적 처치 시 점수가 오르고, 플레이어 피격 시 라이프가 줄어듭니다.
-5. 라이프가 0이 되면 게임오버 UI를 표시하고 게임을 정지합니다.
-6. Retry 버튼으로 같은 씬을 재로드합니다.
+| 오브젝트 | 풀 크기 |
+|----------|---------|
+| EnemyL | 10 |
+| EnemyM | 10 |
+| EnemyS | 20 |
+| ItemCoin | 20 |
+| ItemPower | 10 |
+| ItemBoom | 10 |
+| PlayerBulletA | 100 |
+| PlayerBulletB | 100 |
+| BulletEnemyA | 100 |
+| BulletEnemyB | 100 |
 
-## 8. 알려진 주의사항
+---
 
-- `AreaDrawer` 참조가 비어 있으면 화면 이탈 제거 로직이 정상 동작하지 않을 수 있습니다.
-- 적 조준 로직은 `Player` 태그를 우선 탐색합니다. 플레이어 태그가 누락되면 발사 방향 계산이 실패할 수 있습니다.
-- 현재 `Player`의 피격 처리에서 `GameManager.DecreaseLife()`와 `HandlePlayerDeath()` 흐름이 함께 영향을 줄 수 있어, 체력/목숨 규칙을 확장할 때 중복 감소 여부를 점검하는 것이 좋습니다.
-
-## 9. 폴더 구조(요약)
+## 📁 프로젝트 구조
 
 ```text
 Assets/
-	Player.cs
-	Enemy.cs
-	EnemyBullet.cs
-	PlayerBullet.cs
-	GameManager.cs
-	UIManager.cs
-	AreaDrawer.cs
-	EnemySpawner.cs
-ProjectSettings/
-Packages/
+├── Scripts/
+│   ├── Player.cs           # 플레이어 이동, 발사, 피격, 폭탄 처리
+│   ├── PlayerBullet.cs     # 플레이어 총알 이동 및 충돌
+│   ├── Enemy.cs            # 적기 이동, 발사, 피격, 사망 처리
+│   ├── EnemyBullet.cs      # 적 총알 이동 및 충돌
+│   ├── Item.cs             # 아이템 낙하 및 플레이어 충돌
+│   ├── Boom.cs             # 폭발 오브젝트 (2초 후 풀 반환)
+│   ├── GameManager.cs      # 점수, 목숨, 적 스폰, 게임오버 관리
+│   ├── ObjectManager.cs    # 오브젝트 풀링 싱글톤 (핵심 최적화)
+│   ├── UIManager.cs        # 점수/목숨 UI 업데이트
+│   ├── EnemySpawner.cs     # 사이드 스폰 포인트 및 방향 계산
+│   └── AreaDrawer.cs       # 화면 경계 감지 유틸리티
+├── Prefab/                 # 총알, 적기, 아이템, 폭탄 프리팹
+├── Scenes/
+│   ├── GameScene.unity     # 메인 게임 씬
+│   ├── ObjectPoolScene.unity
+│   └── MecanimScene.unity
+└── Animation/              # 플레이어 애니메이션 (Idle, Left, Right)
 ```
 
-## 10. 개선 아이디어
+---
 
-- 스테이지/웨이브 데이터 분리(ScriptableObject)
-- 적 패턴 다양화(곡선 이동, 탄막)
-- 사운드/이펙트/피격 연출 강화
-- 모바일 입력 대응
-- 점수 저장(로컬/온라인 리더보드)
+## ⚙️ 씬 세팅 체크리스트
+
+### 필수 오브젝트
+- **ObjectManager** — Inspector에서 10가지 프리팹 슬롯 연결
+- **GameManager** — `spawnPoints`, `spawners` 할당
+- **UIManager** — `lifeImages`, `scoreText`, `gameOverPanel` 연결
+- **AreaDrawer** — 화면 경계 4개 포인트 연결
+- **Player** — 태그 `Player`, `firePoint`, 총알 프리팹, `boomPrefab` 연결
+
+### 태그
+| 태그 | 오브젝트 |
+|------|----------|
+| `Player` | 플레이어 |
+| `PlayerBullet` | 플레이어 총알 |
+| `Enemy` | 적기 |
+| `EnemyBullet` | 적 총알 |
+
+---
+
+## 🚀 실행 방법
+
+1. Unity Hub에서 프로젝트 폴더 Open
+2. `Assets/Scenes/GameScene.unity` 씬 오픈
+3. **ObjectManager** 오브젝트 → Inspector에서 프리팹 10종 연결
+4. Play 버튼으로 실행
+
+---
+
+## 📝 구현 체크리스트
+
+- [x] 플레이어 이동 & 애니메이션 (Idle / Left / Right)
+- [x] 마우스 클릭 발사 (즉시 발사 + 연속 발사)
+- [x] Power 레벨별 발사 패턴 (1~3단계)
+- [x] 적기 3종 스폰 시스템 (타이머 자동 생성)
+- [x] Enemy C 플레이어 조준 발사
+- [x] 아이템 애니메이션 & 이동 & 충돌 처리
+- [x] Boom 폭탄 시스템 (마우스 우클릭, 화면 중앙 2초 폭발)
+- [x] 점수 / 목숨 UI
+- [x] 플레이어 사망 & 리스폰 (무적 시간 포함)
+- [x] 오브젝트 풀링 (ObjectManager 싱글톤, 10종 580개 예약)
+- [ ] 적기 처치 시 아이템 드랍 (확률형: None 30% / Coin 30% / Power 20% / Boom 20%)
+- [ ] Coin/Power/Boom 아이템 획득 효과 적용
+- [ ] Boom 사용 시 화면 내 모든 적 & 적 총알 제거
+
+---
+
+## 💡 개선 아이디어
+
+- 스테이지/웨이브 데이터 분리 (ScriptableObject)
+- 적 이동 패턴 다양화 (곡선 이동, 탄막)
+- BGM / SFX 사운드 시스템
+- 점수 저장 (PlayerPrefs 또는 온라인 리더보드)
+- 모바일 터치 입력 대응
+
