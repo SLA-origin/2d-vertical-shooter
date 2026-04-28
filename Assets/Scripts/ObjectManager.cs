@@ -104,8 +104,15 @@ public class ObjectManager : MonoBehaviour
     private GameObject GetFromPool(List<GameObject> pool, GameObject prefab, Vector3 position, Quaternion rotation)
     {
         // 풀에서 비활성화된 오브젝트를 찾습니다
-        for (int i = 0; i < pool.Count; i++)
+        for (int i = pool.Count - 1; i >= 0; i--)
         {
+            // Destroy()로 삭제된 오브젝트가 남아있을 경우 풀에서 제거
+            if (pool[i] == null)
+            {
+                pool.RemoveAt(i);
+                continue;
+            }
+
             if (!pool[i].activeInHierarchy)
             {
                 pool[i].transform.position = position;
