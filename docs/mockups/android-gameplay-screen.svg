@@ -1,0 +1,84 @@
+<svg width="2400" height="1080" viewBox="0 0 2400 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="overlayTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#04110C" stop-opacity="0.78"/>
+      <stop offset="100%" stop-color="#04110C" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#101A17" stop-opacity="0.92"/>
+      <stop offset="100%" stop-color="#0C1215" stop-opacity="0.82"/>
+    </linearGradient>
+    <linearGradient id="hpBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF646E"/>
+      <stop offset="100%" stop-color="#FF9A67"/>
+    </linearGradient>
+    <linearGradient id="oxyBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#59D9FF"/>
+      <stop offset="100%" stop-color="#7BE7E1"/>
+    </linearGradient>
+    <linearGradient id="armorBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#9DFF33"/>
+      <stop offset="100%" stop-color="#D9FF64"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="2400" height="1080" rx="42" fill="#040607"/>
+  <image href="../../Assets/reference/Background.png" x="0" y="-135" width="2400" height="1350" preserveAspectRatio="xMidYMid slice"/>
+  <rect x="0" y="0" width="2400" height="250" fill="url(#overlayTop)"/>
+  <rect x="0" y="860" width="2400" height="220" fill="#030607" opacity="0.28"/>
+
+  <ellipse cx="1230" cy="690" rx="170" ry="72" fill="#8EFF2A" opacity="0.1" filter="url(#softGlow)"/>
+  <ellipse cx="1230" cy="722" rx="118" ry="26" fill="#000000" opacity="0.42"/>
+  <image href="../../Assets/reference/Player.png" x="1040" y="385" width="360" height="540" preserveAspectRatio="xMidYMid meet" filter="url(#shadow)"/>
+
+  <rect x="56" y="48" width="724" height="230" rx="28" fill="url(#panel)" stroke="#385046" stroke-width="3"/>
+  <text x="94" y="98" fill="#F2FBF5" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="34" font-weight="700">지상 조사단 · 공장 탐사</text>
+  <text x="94" y="136" fill="#9EB5A7" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="22">북부 배터리 라인 / 오염 구역 순찰 중</text>
+
+  <text x="96" y="182" fill="#E7F0EA" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="22" font-weight="600">HP</text>
+  <rect x="178" y="164" width="520" height="24" rx="12" fill="#27302D"/>
+  <rect x="178" y="164" width="412" height="24" rx="12" fill="url(#hpBar)"/>
+  <text x="718" y="184" fill="#FFD8D0" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="20" text-anchor="end">84 / 100</text>
+
+  <text x="96" y="226" fill="#E7F0EA" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="22" font-weight="600">산소</text>
+  <rect x="178" y="208" width="520" height="24" rx="12" fill="#27302D"/>
+  <rect x="178" y="208" width="336" height="24" rx="12" fill="url(#oxyBar)"/>
+  <text x="718" y="228" fill="#D7FBFF" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="20" text-anchor="end">62 / 100</text>
+
+  <text x="96" y="270" fill="#E7F0EA" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="22" font-weight="600">방어구</text>
+  <rect x="178" y="252" width="520" height="24" rx="12" fill="#27302D"/>
+  <rect x="178" y="252" width="452" height="24" rx="12" fill="url(#armorBar)"/>
+  <text x="718" y="272" fill="#ECFFD7" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="20" text-anchor="end">87%</text>
+
+  <rect x="2006" y="46" width="338" height="94" rx="24" fill="url(#panel)" stroke="#385046" stroke-width="3"/>
+  <text x="2044" y="92" fill="#F2FBF5" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="28" font-weight="700">정화 샘플 2 / 5</text>
+  <text x="2044" y="122" fill="#9EB5A7" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="18">배터리동 오염도 41%</text>
+
+  <circle cx="226" cy="876" r="132" fill="#0E1517" fill-opacity="0.72" stroke="#5C706B" stroke-width="4"/>
+  <circle cx="226" cy="876" r="74" fill="#1E2A2E" fill-opacity="0.94" stroke="#8AA7A0" stroke-width="4"/>
+  <circle cx="182" cy="918" r="26" fill="#B9D5CF" fill-opacity="0.34"/>
+  <text x="118" y="1020" fill="#DCE8E3" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="26" font-weight="700">조이스틱</text>
+
+  <circle cx="2162" cy="876" r="78" fill="#0F1718" fill-opacity="0.72" stroke="#60756F" stroke-width="4"/>
+  <circle cx="2162" cy="876" r="42" fill="#203335" fill-opacity="0.96"/>
+  <text x="2147" y="886" fill="#E8F5F0" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="26" font-weight="700">조사</text>
+
+  <circle cx="1998" cy="940" r="58" fill="#0F1718" fill-opacity="0.68" stroke="#60756F" stroke-width="4"/>
+  <text x="1974" y="950" fill="#E8F5F0" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="22" font-weight="700">상호작용</text>
+
+  <circle cx="2298" cy="962" r="46" fill="#0F1718" fill-opacity="0.64" stroke="#60756F" stroke-width="4"/>
+  <text x="2276" y="972" fill="#E8F5F0" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="20" font-weight="700">회피</text>
+
+  <rect x="948" y="968" width="504" height="58" rx="18" fill="url(#panel)" stroke="#364B42" stroke-width="3"/>
+  <text x="1200" y="1006" fill="#F2FBF5" font-family="Segoe UI, Apple SD Gothic Neo, sans-serif" font-size="24" font-weight="600" text-anchor="middle">배터리 처리 구역 탐색 중 · 산성 누출 흔적 감지</text>
+</svg>

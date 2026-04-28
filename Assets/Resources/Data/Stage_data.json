@@ -1,0 +1,17 @@
+[
+  {
+    "delay": 1.0,
+    "type": "A",
+    "point": 0
+  },
+  {
+    "delay": 0.5,
+    "type": "B",
+    "point": 1
+  },
+  {
+    "delay": 2.0,
+    "type": "C",
+    "point": 2
+  }
+]
